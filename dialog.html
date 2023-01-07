@@ -1,0 +1,232 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- jQuery -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+        <!-- Extensions library -->
+        <script type="text/javascript" src="js/tableau.extensions.1.latest.min.js"></script>
+
+        <!-- The code for this extension -->
+        <script type="text/javascript" src="js/dialog.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div id="settings">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h4>Snowflake IDM Settings</h4>
+                        </div>
+                        <div class="col-md-auto">
+                            <div id="settingButtons">
+                                <button id="saveButton" type="button" class="btn btn-primay">Save</button>
+                                <button id="cancelButton" type="button" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="settingTabs" rolw="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="main-tab" data-bs-toggle="tab" data-bs-target="#main" type="button" role="tab" aria-controls="main" aria-selected="true">Main</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="columns-tab" data-bs-toggle="tab" data-bs-target="#columns" type="button" role="tab" aria-controls="columns" aria-selected="false">Columns</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="snowflake-tab" data-bs-toggle="tab" data-bs-target="#snowflake" type="button" role="tab" aria-controls="snowflake" aria-selected="false">Snowflake</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="other-tab" data-bs-toggle="tag" data-bs-target="#other" type="button" role="tab" aria-controls="other" aria-selected="false">Other</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="settingTabsContent">
+                    <div class="tab-pane fade show active" id="main" role="tabpanel" aria-labelledby="main-tab">
+                        <div class="table-responsive">
+                            <table id="settingTableMain" class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Setting Name</th>
+                                        <th>Setting Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Source Worksheet</td>
+                                        <td>
+                                            <select id="mainSheetList" class="form-select">
+                                                <option selected disabled value="">-- Select the main source worksheet --</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username columns</td>>
+                                        <td>
+                                            <select id="usernameColumn" class="form-select">
+                                                <option selected disabled value="">-- Select the main soure worksheet --</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Unique Column(s)</td>
+                                        <td>
+                                            <select id="uniqueColumn" class="form-select" multiple>
+                                                <option selected disabled>-- Select the column(s) that make each row unique --</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><abbr title="Worksheet must include the columns 'Lookup Name' and 'Lookup Value'">Lookup Worksheet</abbr></td>
+                                        <td>
+                                            <select id="lookupSheetList" class="form-select">
+                                                <option selected disabled value="">-- Select thte lookup lists worksheet --</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Enable New Rows</td>
+                                        <td><input type="checkbox" id="enableNewRow" class="form-check-input"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Enable Delete Rows</td>
+                                        <td><input type="checkbox" id="enableDelRow" class="form-check-input"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="columns" role="tabpanel" aria-labelledby="columns-tab">
+                        <div class="table-responsive">
+                            <table id="settingsTableCol" class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Column Name</th>
+                                        <th style="text-align: center;">Read Only</th>
+                                        <th style="text-align: center;">Not NULL</th>
+                                        <th style="text-align: center;">Exclude Column</th>
+                                        <th style="text-align: center;">Is Filter</th>
+                                        <th style="text-align: center;">Is Lookup</th>
+                                        <th>Lookup Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="settingTableColRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="snowflake" role="tabpanel" aria-labelledby="snowflake-tab">
+                        <div class="table-responsive">
+                            <table id="settingTableSnowflake" class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Setting Name</th>
+                                        <th>Setting Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Account ID</td>
+                                        <td><input type="text" id="snowflakeAccountId" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>OAuth Refresh Token</td>
+                                        <td><input type="text" id="snowflakeToken" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Client ID</td>
+                                        <td><input type="text" id="snowflakeClientId" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Client Secret</td>
+                                        <td><input type="password" id="snowflakeClientSecret" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Redirect Url</td>
+                                        <td><input type="text" id="snowflakeRedirectUrl" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Database</td>
+                                        <td><input type="text" id="snowflakeDatabase" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Schema</td>
+                                        <td><input type="text" id="snowflakeSchema" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Warehouse</td>
+                                        <td><input type="text" id="snowflakeWarehouse" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Role</td>
+                                        <td><input type="text" id="snowflakeRole" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>IDM Entity Name</td>
+                                        <td><input type="text" id="snowflakeEntity" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button id="btn_authCode" type="button" class="btn btn-outline-primary me-2">Get Auth Code</button></td>
+                                        <td><input type="text" id="snowflakeAuthCode" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button id="btn_refreshToken" type="button" class="btn btn-outline-primary me-2">Get Refresh Token</button></td>
+                                        <td><input type="text" id="snowflakeCurl" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button id="btn_testToken" type="button" class="btn btn-outline-primary me-2">Test Refresh Token</button></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+                        <div class="table-responsive">
+                            <table id="settingTableOther" class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Setting Name</th>
+                                        <th>Setting Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Table Alignment</td>
+                                        <td>
+                                            <select id="tableAlign" class="form-select">
+                                                <option selected value="left">Left</option>
+                                                <option value="center">Center</option>
+                                                <option value="right">Right</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Child Trigger Parameter</td>
+                                        <td>
+                                            <select id="childParam" class="form-select">
+                                                <option selected value=""></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Parent Trigger Parameter</td>
+                                        <td>
+                                            <select id="parentParam" class="form-select">
+                                                <option selected value=""></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>

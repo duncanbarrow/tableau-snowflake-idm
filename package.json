@@ -1,0 +1,12 @@
+{
+  "name": "tableau-snowflake-idm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/duncanbarrow/tableau-snowflake-idm.git",
+  "author": "Duncan Barrow <duncan.barrow@tracktik.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.3"
+  }
+}
